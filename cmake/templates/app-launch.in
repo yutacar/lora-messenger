@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+set -eu
+exec /usr/share/APPLaunch/bin/@APP_EXECUTABLE_NAME@ "$@"

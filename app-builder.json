@@ -1,0 +1,57 @@
+{
+  "package_name": "lora-messenger",
+  "version": "0.1.0",
+  "app_name": "LoRa Messenger",
+  "bin_name": "lora-messenger",
+  "description": "Serverless public-broadcast messenger for CardputerZero with local history, Cap LoRa, and an opt-in Wi-Fi LAN preview.",
+  "runtime": "legacy-deb-only",
+  "lvgl_version": "9.5",
+  "caps": [
+    "keyboard",
+    "filesystem"
+  ],
+  "store": {
+    "summary": "Keyboard-first serverless messenger with local history and opt-in LoRa or Wi-Fi LAN broadcast.",
+    "categories": [
+      "Communication",
+      "Utilities"
+    ],
+    "screenshots": [
+      "screenshot/phase2-en-timeline.png",
+      "screenshot/phase2-en-settings.png",
+      "screenshot/phase2-ja-timeline.png",
+      "screenshot/phase2-zh-hans-timeline.png"
+    ],
+    "description": "A keyboard-operated public-timeline interface for CardputerZero with crash-safe local settings and history, mentions, replies, a bounded Cap LoRa path, and an opt-in same-LAN UDP broadcast preview. Broadcast means local acceptance only; peer delivery is not confirmed.",
+    "locales": {
+      "en": {
+        "title": "LoRa Messenger",
+        "summary": "Keyboard-first serverless messenger with local history and opt-in LoRa or Wi-Fi LAN broadcast."
+      },
+      "ja": {
+        "title": "LoRa メッセンジャー",
+        "summary": "ローカル履歴と、任意で有効にするLoRaまたはWi-Fi LAN送信を備えたメッセンジャー。"
+      },
+      "zh-CN": {
+        "title": "LoRa 消息",
+        "summary": "带本地历史记录及可选LoRa或Wi-Fi LAN广播的键盘消息应用。"
+      }
+    },
+    "license": "MIT",
+    "icon": "assets/images/lora-messenger-store.png",
+    "permissions": {
+      "keyboard_input": true,
+      "network": true,
+      "filesystem": "app-data-only",
+      "external_hardware": true,
+      "hdmi_output": false,
+      "background_service": false,
+      "audio_output": false,
+      "microphone": false,
+      "camera": false,
+      "sensors": false,
+      "gps": false,
+      "device_id": false
+    }
+  }
+}

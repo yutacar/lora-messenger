@@ -1,0 +1,15 @@
+/build/
+/.cache/
+/dist/
+/Testing/
+/.DS_Store
+*.deb
+__pycache__/
+*.py[cod]
+
+# Keep the reviewed Phase 0 capture and the README screenshots, ignore
+# ad-hoc simulator captures.
+/screenshot/*.png
+!/screenshot/phase0-home.png
+!/screenshot/phase2-*.png
+!/screenshot/title-en-menu.png

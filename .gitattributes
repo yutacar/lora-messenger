@@ -1,0 +1,4 @@
+# Preserve verified upstream amalgamations byte-for-byte while excluding their
+# pre-existing trailing spaces from repository whitespace checks.
+third_party/sqlite/sqlite3.c whitespace=-trailing-space
+third_party/sqlite/sqlite3ext.h whitespace=-trailing-space

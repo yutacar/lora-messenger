@@ -1,0 +1,186 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 31,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "core-only",
+      "displayName": "Offline core, protocol, and persistence build",
+      "description": "No-UI configure with pure core/protocol, test-only simulated transport, and pinned SQLite/POSIX persistence; no LVGL, SDL, radio, or network",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_UI": "OFF",
+        "BUILD_TESTING": "ON",
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "core-only-sanitize",
+      "displayName": "Sanitized offline core, protocol, and persistence build",
+      "description": "Single-config Debug build with ASan/UBSan, protocol/simulation and pinned local persistence tests, and no UI or network fetch",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_UI": "OFF",
+        "BUILD_TESTING": "ON",
+        "ENABLE_SANITIZERS": "ON",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "darwin-arm64",
+      "displayName": "Apple Silicon desktop simulator",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_UI": "ON",
+        "BUILD_TESTING": "ON",
+        "USE_DESKTOP": "ON",
+        "CMAKE_OSX_ARCHITECTURES": "arm64",
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "FETCHCONTENT_BASE_DIR": "${sourceDir}/.cache/darwin-arm64-deps",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}/install",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++"
+      }
+    },
+    {
+      "name": "cp0-native",
+      "displayName": "CardputerZero native build",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_UI": "ON",
+        "BUILD_TESTING": "OFF",
+        "USE_DESKTOP": "OFF",
+        "APP_USE_DRM": "OFF",
+        "CM0_ALLOW_FETCH_DEPS": "OFF",
+        "CM0_SDK_ROOT": "/",
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+        "FETCHCONTENT_BASE_DIR": "${sourceDir}/.cache/cp0-deps",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}/install",
+        "CMAKE_C_COMPILER": "/usr/bin/gcc",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++"
+      }
+    },
+    {
+      "name": "cp0-cross",
+      "displayName": "CardputerZero aarch64 cross build",
+      "inherits": "cp0-native",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/cp0-aarch64-linux-gnu.cmake",
+        "CM0_SDK_ROOT": "${sourceDir}/.cache/sdk_bsp-src",
+        "CMAKE_SYSROOT": "${sourceDir}/.cache/sdk_bsp-src",
+        "CM0_ALLOW_FETCH_DEPS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "core-only-dbg",
+      "configurePreset": "core-only",
+      "configuration": "Debug"
+    },
+    {
+      "name": "core-only-rel",
+      "configurePreset": "core-only",
+      "configuration": "Release"
+    },
+    {
+      "name": "core-only-sanitize",
+      "configurePreset": "core-only-sanitize"
+    },
+    {
+      "name": "darwin-arm64-dbg",
+      "configurePreset": "darwin-arm64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "darwin-arm64-rel",
+      "configurePreset": "darwin-arm64",
+      "configuration": "Release"
+    },
+    {
+      "name": "cp0-cross-dbg",
+      "configurePreset": "cp0-cross",
+      "configuration": "Debug"
+    },
+    {
+      "name": "cp0-cross-rel",
+      "configurePreset": "cp0-cross",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "core-only-dbg",
+      "configurePreset": "core-only",
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true },
+      "execution": { "noTestsAction": "error" }
+    },
+    {
+      "name": "core-only-rel",
+      "configurePreset": "core-only",
+      "configuration": "Release",
+      "output": { "outputOnFailure": true },
+      "execution": { "noTestsAction": "error" }
+    },
+    {
+      "name": "core-only-sanitize",
+      "configurePreset": "core-only-sanitize",
+      "environment": {
+        "ASAN_OPTIONS": "abort_on_error=1:halt_on_error=1",
+        "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+      },
+      "output": { "outputOnFailure": true },
+      "execution": { "noTestsAction": "error" }
+    },
+    {
+      "name": "darwin-arm64-dbg",
+      "configurePreset": "darwin-arm64",
+      "configuration": "Debug",
+      "output": { "outputOnFailure": true },
+      "execution": { "noTestsAction": "error" }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "cp0-cross-deb",
+      "displayName": "CardputerZero Debian package",
+      "configurePreset": "cp0-cross",
+      "generators": ["DEB"],
+      "configurations": ["Release"],
+      "configFile": "${sourceDir}/build/cp0-cross/CPackConfig.cmake",
+      "packageDirectory": "${sourceDir}/dist"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "cp0-cross-package",
+      "displayName": "Configure, build, and package CardputerZero",
+      "description": "Fresh cross configuration, Release ARM64 build, and CPack Debian package",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "cp0-cross"
+        },
+        {
+          "type": "build",
+          "name": "cp0-cross-rel"
+        },
+        {
+          "type": "package",
+          "name": "cp0-cross-deb"
+        }
+      ]
+    }
+  ]
+}

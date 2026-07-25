@@ -1,0 +1,21 @@
+THIRD-PARTY FONT LICENSE INDEX
+==============================
+
+Inter 18pt fonts
+  Files: inter-regular.ttf, inter-medium.ttf, inter-semibold.ttf,
+         inter-bold.ttf
+  License: SIL Open Font License 1.1
+  Full text: ../licenses/Inter-OFL-1.1.txt
+
+Noto Sans CJK UI subsets
+  Files: lora-ui-ja.otf, lora-ui-zh-hans.otf
+  License: SIL Open Font License 1.1
+  Full text: ../licenses/Noto-CJK-OFL-1.1.txt
+
+Phosphor Icons
+  File: Phosphor-Fill.ttf
+  License: MIT
+  Full text: ../licenses/Phosphor-MIT.txt
+
+Provenance, versions, source and generated-file hashes are recorded in
+../licenses/THIRD_PARTY_NOTICES.md. No Kenney asset is distributed here.

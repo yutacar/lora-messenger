@@ -1,0 +1,14 @@
+SQLite 3.53.3
+=============
+
+SQLite is in the public domain. The SQLite project states that all of the code
+and documentation in SQLite has been dedicated to the public domain by its
+authors, and may be used for any purpose.
+
+Official public-domain statement:
+https://www.sqlite.org/copyright.html
+
+Vendored source archive:
+https://www.sqlite.org/2026/sqlite-amalgamation-3530300.zip
+
+This notice records provenance; it does not add restrictions to SQLite.

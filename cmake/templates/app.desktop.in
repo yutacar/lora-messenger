@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=@APP_DISPLAY_NAME@
+Comment=@APP_PACKAGE_DESCRIPTION@
+Exec=/usr/share/APPLaunch/bin/@APP_PACKAGE_NAME@-launch
+Icon=share/images/lora-messenger.png
+Terminal=false
+Categories=Network;
+StartupNotify=false

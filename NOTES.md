@@ -1479,3 +1479,47 @@ publication action was performed.
 
 No hardware, RF transmission, remote, push, PR, AppStore, login/OAuth, or
 publication action was performed.
+
+## 2026-07-26 — History squashed and v0.1.0 early-test release published
+
+### Authorization and behavior
+
+- User authorization: squash the full repository history into a single commit
+  and cut a `v0.1.0` GitHub release with a built `.deb` attached, for people
+  who already own CardputerZero hardware to try ahead of the maintainer's own
+  physical device arriving. Confirmed explicitly, in order: squash scope (full
+  history, not just this session), force-push permission, and rebuild-and-attach
+  for the `.deb` (rather than reusing the stale one), and separately confirmed
+  the release should be marked GitHub pre-release rather than a normal latest
+  release.
+- Squashed all 22 prior commits (Phase 0 bootstrap through the 2026-07-24 CJK
+  input fix) into one root commit via an orphan branch
+  (`git checkout --orphan`, `git add -A`, one commit, then replacing `main`),
+  confirmed byte-identical working tree (`ninja: no work to do` on rebuild) and
+  the full 47/47 desktop Debug suite still green before force-pushing.
+  `git push --force origin main` rewrote the previously-pushed history
+  (`dc685dd...70d7b62`).
+- Rebuilt the ARM64 `.deb` from this exact commit via
+  `cmake --workflow --preset cp0-cross-package` (the stale `dist/` artifact
+  predated both the title-logo and CJK-input-fix commits and was deleted
+  first). CPack's post-build validator passed with zero errors (only the
+  known, already-documented Maintainer-placeholder warning).
+- Tagged `v0.1.0` on the squashed commit and published a GitHub pre-release
+  (`gh release create --prerelease`) with the rebuilt `.deb` attached and
+  release notes stating explicitly that physical-device acceptance (PLAN.md
+  Phase 7) is still pending and this is a tester build, plus install
+  instructions and known limitations (Maintainer placeholder, LoRa/Wi-Fi
+  verified only in simulation so far, no on-device CJK IME).
+
+### Verification
+
+| Check | Result |
+| --- | --- |
+| Working tree identity after squash | `cmake --build --preset darwin-arm64-dbg` reported `ninja: no work to do`; `ctest -C Debug` 47/47 passed |
+| ARM64 package rebuild | `dpkg`/`readelf`/BSP-ABI validation passed with zero errors; `lora-messenger_0.1.0-1_arm64.deb`, 2,329,808 bytes, SHA-256 `fcff8df76bdde7917f1f26fd4110a518b6708b8c8ded06e923cdb0416353c5fc` |
+| `git push --force origin main` | succeeded; remote `main` now matches the single squashed commit `70d7b62ff9fa71e76be7e20e7b9cf9b813758b03` |
+| `git push origin v0.1.0` / `gh release create` | tag and pre-release published: https://github.com/yutacar/lora-messenger/releases/tag/v0.1.0 |
+
+No hardware, RF transmission, login/OAuth, or AppStore submission was
+performed. This is a GitHub-only pre-release for existing-hardware testers,
+not an AppStore/`czdev publish` action.
